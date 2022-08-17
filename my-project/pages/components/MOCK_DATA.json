@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "caseNr": 939,
+    "caseManager": "Hartwell",
+    "patient": 178,
+    "producer": "",
+    "phase": "Kalkulation",
+    "status": "Bearbeitbar",
+    "datum": "2021-12-02",
+    "customer": 872
+  },
+  {
+    "id": 2,
+    "caseNr": 929,
+    "caseManager": "Sherline",
+    "patient": 450,
+    "producer": "",
+    "phase": "Kalkulation",
+    "status": "In Bearbeitung",
+    "datum": "2021-09-02",
+    "customer": 120
+  },
+  {
+    "id": 3,
+    "caseNr": 19,
+    "caseManager": "Skip",
+    "patient": 166,
+    "producer": "",
+    "phase": "Kalkulation",
+    "status": "In Bearbeitung",
+    "datum": "2021-11-08",
+    "customer": 154
+  },
+  {
+    "id": 4,
+    "caseNr": 119,
+    "caseManager": "Freddie",
+    "patient": 340,
+    "producer": "",
+    "phase": "Kalkulation",
+    "status": "Freigeben",
+    "datum": "2021-07-16",
+    "customer": 67
+  },
+  {
+    "id": 5,
+    "caseNr": 428,
+    "caseManager": "Daphna",
+    "patient": 807,
+    "producer": "",
+    "phase": "Auftrag",
+    "status": "Bearbeitbar",
+    "datum": "2021-01-11",
+    "customer": 955
+  },
+  {
+    "id": 6,
+    "caseNr": 966,
+    "caseManager": "Zach",
+    "patient": 990,
+    "producer": "",
+    "phase": "Auftrag",
+    "status": "Bearbeitbar",
+    "datum": "2021-05-06",
+    "customer": 598
+  },
+  {
+    "id": 7,
+    "caseNr": 375,
+    "caseManager": "Elke",
+    "patient": 208,
+    "producer": "",
+    "phase": "Auftrag",
+    "status": "In Bearbeitung",
+    "datum": "2021-12-22",
+    "customer": 219
+  },
+  {
+    "id": 8,
+    "caseNr": 228,
+    "caseManager": "Merridie",
+    "patient": 808,
+    "producer": "",
+    "phase": "Auftrag",
+    "status": "Freigeben",
+    "datum": "2022-03-10",
+    "customer": 931
+  },
+  {
+    "id": 9,
+    "caseNr": 953,
+    "caseManager": "Nathalie",
+    "patient": 688,
+    "producer": "",
+    "phase": "Auftrag",
+    "status": "NC",
+    "datum": "2022-10-03",
+    "customer": 931
+  },
+  {
+    "id": 10,
+    "caseNr": 625,
+    "caseManager": "Caldwell",
+    "patient": 758,
+    "producer": "",
+    "phase": "Bestätigung",
+    "status": "Bearbeitbar",
+    "datum": "2022-04-19",
+    "customer": 581
+  },
+  {
+    "id": 11,
+    "caseNr": 623,
+    "caseManager": "Lacee",
+    "patient": 965,
+    "producer": "",
+    "phase": "Bestätigung",
+    "status": "Bearbeitbar",
+    "datum": "2022-01-21",
+    "customer": 66
+  },
+  {
+    "id": 12,
+    "caseNr": 917,
+    "caseManager": "Matilde",
+    "patient": 894,
+    "producer": "",
+    "phase": "Bestätigung",
+    "status": "Freigeben",
+    "datum": "2022-11-10",
+    "customer": 66
+  },
+  {
+    "id": 13,
+    "caseNr": 175,
+    "caseManager": "Tiffani",
+    "patient": 150,
+    "producer": "",
+    "phase": "Bestätigung",
+    "status": "NC",
+    "datum": "2022-07-08",
+    "customer": 855
+  },
+  {
+    "id": 14,
+    "caseNr": 101,
+    "caseManager": "Darwin",
+    "patient": 330,
+    "producer": "",
+    "phase": "NC",
+    "status": "Bearbeitbar",
+    "datum": "2022-12-04",
+    "customer": 499
+  },
+  {
+    "id": 15,
+    "caseNr": 377,
+    "caseManager": "Esra",
+    "patient": 109,
+    "producer": "",
+    "phase": "NC",
+    "status": "Bearbeitbar",
+    "datum": "2022-05-22",
+    "customer": 372
+  },
+  {
+    "id": 16,
+    "caseNr": 87,
+    "caseManager": "Kimmi",
+    "patient": 495,
+    "producer": "Carling",
+    "phase": "Produktion",
+    "status": "Bearbeitbar",
+    "datum": "2022-02-08",
+    "customer": 845
+  },
+  {
+    "id": 17,
+    "caseNr": 835,
+    "caseManager": "Jerrie",
+    "patient": 438,
+    "producer": "Angelo",
+    "phase": "Produktion",
+    "status": "In Bearbeitung",
+    "datum": "2022-06-06",
+    "customer": 219
+  },
+  {
+    "id": 18,
+    "caseNr": 217,
+    "caseManager": "Rollo",
+    "patient": 212,
+    "producer": "Sisile",
+    "phase": "Produktion",
+    "status": "NC",
+    "datum": "2022-03-01",
+    "customer": 858
+  },
+  {
+    "id": 19,
+    "caseNr": 890,
+    "caseManager": "Artemas",
+    "patient": 667,
+    "producer": "Kalinda",
+    "phase": "Abschluss",
+    "status": "Ausblendbar",
+    "datum": "2022-03-24",
+    "customer": 104
+  },
+  {
+    "id": 20,
+    "caseNr": 829,
+    "caseManager": "Moreen",
+    "patient": 651,
+    "producer": "Alexandre",
+    "phase": "Abschluss",
+    "status": "Ausblendbar",
+    "datum": "2022-03-28",
+    "customer": 711
+  }
+]
