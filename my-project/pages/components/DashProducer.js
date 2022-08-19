@@ -1,6 +1,7 @@
 import React from "react";
 import {Fragment, useState} from 'react'
 import {Dialog, Menu, Transition} from '@headlessui/react'
+import {motion} from 'framer-motion';
 import {
     BellIcon,
     CalendarIcon,
@@ -17,14 +18,19 @@ import {
 } from '@heroicons/react/outline'
 import {PlusIcon, SearchIcon, TrashIcon} from '@heroicons/react/solid'
 import LogoutAlert from "./LogoutAlert";
+import Logout from "./LogoutAlert";
 import Abschluss from "./Abschluss";
+import {CheckIcon, SelectorIcon} from '@heroicons/react/solid'
+import {Combobox} from '@headlessui/react'
 import Kalkulation from "./Kalkulation";
 import styles3 from './AuftragsListe.module.css'
 import Produktion from "./Produktion";
 import styles2 from './Auftrag.module.css'
-import data from "./MOCK_DATA.json";
+import data from "./MOCK_DATA_PRODUCER.json"
 import Badge from "./Badge";
-
+import Home from "../index";
+import { Listbox } from '@headlessui/react'
+import Shrinkable from "./Shrinkable";
 
 
 const navigation = [
@@ -44,7 +50,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function DashCaseManager({Logout}) {
+export default function DashProducer({Logout}) {
 
     {/* Filtered List für Auftrag Phase */}
     const auftraegeFiltered = data.filter(d => d.phase == "Auftrag");
@@ -57,9 +63,18 @@ export default function DashCaseManager({Logout}) {
     {/* Filtered List für Bestätigungsphase */}
     const abschlussFiltered = data.filter(d => d.phase == "Abschluss");
 
+    const adminitrationFiltered = data.filter(d => d.processStep == "Administration");
+    const ctScanFiltered = data.filter(d => d.processStep == "CT-Scan");
+    const segmentierungFiltered = data.filter(d => d.processStep == "CT-Datensegmentierung");
+    const matchingFiltered = data.filter(d => d.processStep == "Implantatdesign Matching");
+    const preprocessingFiltered = data.filter(d => d.processStep == "Pre-Processing");
+    const slmFiltered = data.filter(d => d.processStep == "SLM");
+    const waermeFiltered = data.filter(d => d.processStep == "Wärmebehandlung");
+    const deburringFiltered = data.filter(d => d.processStep == "Deburring");
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+
 
     const [filters, setFilters] = useState({
         customer: "",
@@ -124,8 +139,17 @@ export default function DashCaseManager({Logout}) {
     const [allDataProduktion, setDataProduktion] =useState(produktionFiltered);
     const [allDataAbschluss, setDataAbschluss] =useState(abschlussFiltered);
 
+    const [allDataAdmin, setDataAdmin] =useState(adminitrationFiltered);
+    const [allDataCt, setDataCt] =useState(ctScanFiltered);
+    const [allDataSegmentierung, setDataSegmentierung] =useState(segmentierungFiltered);
+    const [allDataMatching, setDataMatching] =useState(matchingFiltered);
+    const [allDataPreprocessing, setDataPreprocessing] =useState(preprocessingFiltered);
+    const [allDataSLM, setDataSLM] =useState(slmFiltered);
+    const [allDataWaerme, setDataWaerme] =useState(waermeFiltered);
+    const [allDataDeburring, setDataDeburring] =useState(deburringFiltered);
+
     const handleFilterCustomer = (customer) => {
-        const filteredData = auftraegeFiltered.filter(item => {
+        const filteredAdminData = adminitrationFiltered.filter(item => {
             const fullCostumer = `${item.customer}`;
             console.log("customer handler activated");
             console.log(fullCostumer);
@@ -133,7 +157,7 @@ export default function DashCaseManager({Logout}) {
                 return item;
             }
         });
-        const filteredKalkulationData = kalkulationFiltered.filter(item => {
+        const filteredCTData = ctScanFiltered.filter(item => {
             const fullCostumer = `${item.customer}`;
             console.log("customer handler activated");
             console.log(fullCostumer);
@@ -141,7 +165,7 @@ export default function DashCaseManager({Logout}) {
                 return item;
             }
         });
-        const filteredBestaetigungData = bestaetigungFiltered.filter(item => {
+        const filteredSegmentierungData = segmentierungFiltered.filter(item => {
             const fullCostumer = `${item.customer}`;
             console.log("customer handler activated");
             console.log(fullCostumer);
@@ -149,7 +173,7 @@ export default function DashCaseManager({Logout}) {
                 return item;
             }
         });
-        const filteredProduktionData = produktionFiltered.filter(item => {
+        const filteredMatchingData = matchingFiltered.filter(item => {
             const fullCostumer = `${item.customer}`;
             console.log("customer handler activated");
             console.log(fullCostumer);
@@ -157,7 +181,15 @@ export default function DashCaseManager({Logout}) {
                 return item;
             }
         });
-        const filteredAbschlussData = abschlussFiltered.filter(item => {
+        const filteredPreprocessingData = preprocessingFiltered.filter(item => {
+            const fullPatient = `${item.patient}`;
+            console.log(fullPatient);
+            if(fullPatient.toLowerCase().includes(customer.toLowerCase())){
+                return item;
+            }
+        });
+
+        const filteredWaermeData = waermeFiltered.filter(item => {
             const fullCostumer = `${item.customer}`;
             console.log("customer handler activated");
             console.log(fullCostumer);
@@ -165,166 +197,253 @@ export default function DashCaseManager({Logout}) {
                 return item;
             }
         });
-        setData(filteredData);
-        setDataKalkulation(filteredKalkulationData);
-        setDataBestaetigung(filteredBestaetigungData);
-        setDataProduktion(filteredProduktionData);
-        setDataAbschluss(filteredAbschlussData);
+
+        const filteredSLMData = slmFiltered.filter(item => {
+            const fullCostumer = `${item.customer}`;
+            console.log("customer handler activated");
+            console.log(fullCostumer);
+            if(fullCostumer.toLowerCase().includes(customer.toLowerCase())){
+                return item;
+            }
+        });
+
+        const filteredDeburringData = deburringFiltered.filter(item => {
+            const fullCostumer = `${item.customer}`;
+            console.log("customer handler activated");
+            console.log(fullCostumer);
+            if(fullCostumer.toLowerCase().includes(customer.toLowerCase())){
+                return item;
+            }
+        });
+        setDataAdmin(filteredAdminData);
+        setDataCt(filteredCTData);
+        setDataSegmentierung(filteredSegmentierungData);
+        setDataMatching(filteredMatchingData);
+        setDataPreprocessing(filteredPreprocessingData);
+        setDataSLM(filteredSLMData);
+        setDataWaerme(filteredWaermeData);
+        setDataDeburring(filteredDeburringData);
     }
 
     const handleFilterPatient = (patient) => {
-        const filteredData = auftraegeFiltered.filter(item => {
+        const filteredAdminData = adminitrationFiltered.filter(item => {
             const fullPatient = `${item.patient}`;
             console.log(fullPatient);
             if(fullPatient.toLowerCase().includes(patient.toLowerCase())){
                 return item;
             }
         });
-        const filteredKalkulationData = kalkulationFiltered.filter(item => {
+        const filteredCTData = ctScanFiltered.filter(item => {
             const fullPatient = `${item.patient}`;
             console.log(fullPatient);
             if(fullPatient.toLowerCase().includes(patient.toLowerCase())){
                 return item;
             }
         });
-        const filteredBestaetigungData = bestaetigungFiltered.filter(item => {
+        const filteredSegmentierungData = segmentierungFiltered.filter(item => {
             const fullPatient = `${item.patient}`;
             console.log(fullPatient);
             if(fullPatient.toLowerCase().includes(patient.toLowerCase())){
                 return item;
             }
         });
-        const filteredProduktionData = produktionFiltered.filter(item => {
+        const filteredMatchingData = matchingFiltered.filter(item => {
             const fullPatient = `${item.patient}`;
             console.log(fullPatient);
             if(fullPatient.toLowerCase().includes(patient.toLowerCase())){
                 return item;
             }
         });
-        const filteredAbschlussData = abschlussFiltered.filter(item => {
+        const filteredSLMData = slmFiltered.filter(item => {
             const fullPatient = `${item.patient}`;
             console.log(fullPatient);
             if(fullPatient.toLowerCase().includes(patient.toLowerCase())){
                 return item;
             }
         });
-        setData(filteredData);
-        setDataKalkulation(filteredKalkulationData);
-        setDataBestaetigung(filteredBestaetigungData);
-        setDataProduktion(filteredProduktionData);
-        setDataAbschluss(filteredAbschlussData);
+        const filteredPreprocessingData = preprocessingFiltered.filter(item => {
+            const fullPatient = `${item.patient}`;
+            console.log(fullPatient);
+            if(fullPatient.toLowerCase().includes(patient.toLowerCase())){
+                return item;
+            }
+        });
+        const filteredWaermeData = waermeFiltered.filter(item => {
+            const fullPatient = `${item.patient}`;
+            console.log(fullPatient);
+            if(fullPatient.toLowerCase().includes(patient.toLowerCase())){
+                return item;
+            }
+        });
+        const filteredDeburringData = deburringFiltered.filter(item => {
+            const fullPatient = `${item.patient}`;
+            console.log(fullPatient);
+            if(fullPatient.toLowerCase().includes(patient.toLowerCase())){
+                return item;
+            }
+        });
+
+        setDataAdmin(filteredAdminData);
+        setDataCt(filteredCTData);
+        setDataSegmentierung(filteredSegmentierungData);
+        setDataMatching(filteredMatchingData);
+        setDataPreprocessing(filteredPreprocessingData);
+        setDataSLM(filteredSLMData);
+        setDataWaerme(filteredWaermeData);
+        setDataDeburring(filteredDeburringData);
     }
 
     const handleFilterCase = (patient) => {
-        const filteredData = auftraegeFiltered.filter(item => {
+        const filteredAdminData = adminitrationFiltered.filter(item => {
             const fullCase = `${item.caseNr}`;
             console.log(fullCase);
             if(fullCase.toLowerCase().includes(patient.toLowerCase())){
                 return item;
             }
         });
-        const filteredKalkulationData = kalkulationFiltered.filter(item => {
+        const filteredCTData = ctScanFiltered.filter(item => {
             const fullCase = `${item.caseNr}`;
             console.log(fullCase);
             if(fullCase.toLowerCase().includes(patient.toLowerCase())){
                 return item;
             }
         });
-        const filteredBestaetigungData = bestaetigungFiltered.filter(item => {
+        const filteredSegmentierungData = segmentierungFiltered.filter(item => {
             const fullCase = `${item.caseNr}`;
             console.log(fullCase);
             if(fullCase.toLowerCase().includes(patient.toLowerCase())){
                 return item;
             }
         });
-        const filteredProduktionData = produktionFiltered.filter(item => {
+        const filteredMatchingData = matchingFiltered.filter(item => {
             const fullCase = `${item.caseNr}`;
             console.log(fullCase);
             if(fullCase.toLowerCase().includes(patient.toLowerCase())){
                 return item;
             }
         });
-        const filteredAbschlussData = abschlussFiltered.filter(item => {
+        const filteredSLMData = slmFiltered.filter(item => {
             const fullCase = `${item.caseNr}`;
             console.log(fullCase);
             if(fullCase.toLowerCase().includes(patient.toLowerCase())){
                 return item;
             }
         });
-        setData(filteredData);
-        setDataKalkulation(filteredKalkulationData);
-        setDataBestaetigung(filteredBestaetigungData);
-        setDataProduktion(filteredProduktionData);
-        setDataAbschluss(filteredAbschlussData);
+
+        const filteredPreprocessingData = preprocessingFiltered.filter(item => {
+            const fullCase = `${item.caseNr}`;
+            console.log(fullCase);
+            if(fullCase.toLowerCase().includes(patient.toLowerCase())){
+                return item;
+            }
+        });
+
+        const filteredWaermeData = waermeFiltered.filter(item => {
+            const fullCase = `${item.caseNr}`;
+            console.log(fullCase);
+            if(fullCase.toLowerCase().includes(patient.toLowerCase())){
+                return item;
+            }
+        });
+
+        const filteredDeburringData = deburringFiltered.filter(item => {
+            const fullCase = `${item.caseNr}`;
+            console.log(fullCase);
+            if(fullCase.toLowerCase().includes(patient.toLowerCase())){
+                return item;
+            }
+        });
+
+        setDataAdmin(filteredAdminData);
+        setDataCt(filteredCTData);
+        setDataSegmentierung(filteredSegmentierungData);
+        setDataMatching(filteredMatchingData);
+        setDataPreprocessing(filteredPreprocessingData);
+        setDataSLM(filteredSLMData);
+        setDataWaerme(filteredWaermeData);
+        setDataDeburring(filteredDeburringData);
     }
 
     const handleFilterDate = (date) => {
-        const filteredData = auftraegeFiltered.filter(item => {
+        const filteredAdminData = adminitrationFiltered.filter(item => {
             const fullDate = `${item.datum}`;
             console.log(fullDate);
             if(fullDate.includes(date)){
                 return item;
             }
         });
-        const filteredKalkulationData = kalkulationFiltered.filter(item => {
+        const filteredCTData = ctScanFiltered.filter(item => {
             const fullDate = `${item.datum}`;
             console.log(fullDate);
             if(fullDate.includes(date)){
                 return item;
             }
         });
-        const filteredBestaetigungData = bestaetigungFiltered.filter(item => {
+        const filteredSegmentierungData = segmentierungFiltered.filter(item => {
             const fullDate = `${item.datum}`;
             console.log(fullDate);
             if(fullDate.includes(date)){
                 return item;
             }
         });
-        const filteredProduktionData = produktionFiltered.filter(item => {
+        const filteredMatchingData = matchingFiltered.filter(item => {
             const fullDate = `${item.datum}`;
             console.log(fullDate);
             if(fullDate.includes(date)){
                 return item;
             }
         });
-        const filteredAbschlussData = abschlussFiltered.filter(item => {
+        const filteredSLMData = slmFiltered.filter(item => {
             const fullDate = `${item.datum}`;
             console.log(fullDate);
             if(fullDate.includes(date)){
                 return item;
             }
         });
-        setData(filteredData);
-        setDataKalkulation(filteredKalkulationData);
-        setDataBestaetigung(filteredBestaetigungData);
-        setDataProduktion(filteredProduktionData);
-        setDataAbschluss(filteredAbschlussData);
+
+        const filteredPreprocessingData = preprocessingFiltered.filter(item => {
+            const fullDate = `${item.datum}`;
+            console.log(fullDate);
+            if(fullDate.includes(date)){
+                return item;
+            }
+        });
+
+        const filteredWaermeData = waermeFiltered.filter(item => {
+            const fullDate = `${item.datum}`;
+            console.log(fullDate);
+            if(fullDate.includes(date)){
+                return item;
+            }
+        });
+
+        const filteredDeburringData = deburringFiltered.filter(item => {
+            const fullDate = `${item.datum}`;
+            console.log(fullDate);
+            if(fullDate.includes(date)){
+                return item;
+            }
+        });
+
+        setDataAdmin(filteredAdminData);
+        setDataCt(filteredCTData);
+        setDataSegmentierung(filteredSegmentierungData);
+        setDataMatching(filteredMatchingData);
+        setDataPreprocessing(filteredPreprocessingData);
+        setDataSLM(filteredSLMData);
+        setDataWaerme(filteredWaermeData);
+        setDataDeburring(filteredDeburringData);
     }
 
     const handleFilterPhase = (phase) => {
-        const filteredData = auftraegeFiltered.filter(item => {
+        const filteredAdminData = adminitrationFiltered.filter(item => {
             const fullPhase = `${item.phase}`;
             console.log(fullPhase);
             if(fullPhase.toLowerCase().includes(phase.toLowerCase())){
                 return item;
             }
         });
-        const filteredKalkulationData = kalkulationFiltered.filter(item => {
-            const fullPhase = `${item.phase}`;
-            console.log(fullPhase);
-            if(fullPhase.toLowerCase().includes(phase.toLowerCase())){
-                return item;
-            }
-        });
-
-        const filteredBestaetigungData = bestaetigungFiltered.filter(item => {
-            const fullPhase = `${item.phase}`;
-            console.log(fullPhase);
-            if(fullPhase.toLowerCase().includes(phase.toLowerCase())){
-                return item;
-            }
-        });
-        const filteredProduktionData = produktionFiltered.filter(item => {
+        const filteredCTData = ctScanFiltered.filter(item => {
             const fullPhase = `${item.phase}`;
             console.log(fullPhase);
             if(fullPhase.toLowerCase().includes(phase.toLowerCase())){
@@ -332,7 +451,14 @@ export default function DashCaseManager({Logout}) {
             }
         });
 
-        const filteredAbschlussData = abschlussFiltered.filter(item => {
+        const filteredSegmentierungData = segmentierungFiltered.filter(item => {
+            const fullPhase = `${item.phase}`;
+            console.log(fullPhase);
+            if(fullPhase.toLowerCase().includes(phase.toLowerCase())){
+                return item;
+            }
+        });
+        const filteredMatchingData = matchingFiltered.filter(item => {
             const fullPhase = `${item.phase}`;
             console.log(fullPhase);
             if(fullPhase.toLowerCase().includes(phase.toLowerCase())){
@@ -340,15 +466,50 @@ export default function DashCaseManager({Logout}) {
             }
         });
 
-        setData(filteredData);
-        setDataKalkulation(filteredKalkulationData);
-        setDataBestaetigung(filteredBestaetigungData);
-        setDataProduktion(filteredProduktionData);
-        setDataAbschluss(filteredAbschlussData);
+        const filteredPreprocessingData = preprocessingFiltered.filter(item => {
+            const fullPhase = `${item.phase}`;
+            console.log(fullPhase);
+            if(fullPhase.toLowerCase().includes(phase.toLowerCase())){
+                return item;
+            }
+        });
+
+        const filteredSLMData = slmFiltered.filter(item => {
+            const fullPhase = `${item.phase}`;
+            console.log(fullPhase);
+            if(fullPhase.toLowerCase().includes(phase.toLowerCase())){
+                return item;
+            }
+        });
+
+        const filteredWaermeData = waermeFiltered.filter(item => {
+            const fullPhase = `${item.phase}`;
+            console.log(fullPhase);
+            if(fullPhase.toLowerCase().includes(phase.toLowerCase())){
+                return item;
+            }
+        });
+
+        const filteredDeburringData = deburringFiltered.filter(item => {
+            const fullPhase = `${item.phase}`;
+            console.log(fullPhase);
+            if(fullPhase.toLowerCase().includes(phase.toLowerCase())){
+                return item;
+            }
+        });
+
+        setDataAdmin(filteredAdminData);
+        setDataCt(filteredCTData);
+        setDataSegmentierung(filteredSegmentierungData);
+        setDataMatching(filteredMatchingData);
+        setDataPreprocessing(filteredPreprocessingData);
+        setDataSLM(filteredSLMData);
+        setDataWaerme(filteredWaermeData);
+        setDataDeburring(filteredDeburringData);
     }
 
     const handleFilterStatus = (status) => {
-        const filteredData = auftraegeFiltered.filter(item => {
+        const filteredAdminData = adminitrationFiltered.filter(item => {
             const fullStatus = `${item.status}`;
             const select ="select"
             console.log(fullStatus);
@@ -358,7 +519,7 @@ export default function DashCaseManager({Logout}) {
                 return item
             }
         });
-        const filteredKalkulationData = kalkulationFiltered.filter(item => {
+        const filteredCTData = ctScanFiltered.filter(item => {
             const fullStatus = `${item.status}`;
             const select ="select"
             console.log(fullStatus);
@@ -368,7 +529,7 @@ export default function DashCaseManager({Logout}) {
                 return item
             }
         });
-        const filteredBestaetigungData = bestaetigungFiltered.filter(item => {
+        const filteredSegmentierungData = segmentierungFiltered.filter(item => {
             const fullStatus = `${item.status}`;
             const select ="select"
             console.log(fullStatus);
@@ -378,7 +539,7 @@ export default function DashCaseManager({Logout}) {
                 return item
             }
         });
-        const filteredProduktionData = produktionFiltered.filter(item => {
+        const filteredMatchingData = matchingFiltered.filter(item => {
             const fullStatus = `${item.status}`;
             const select ="select"
             console.log(fullStatus);
@@ -388,7 +549,7 @@ export default function DashCaseManager({Logout}) {
                 return item
             }
         });
-        const filteredAbschlussData = abschlussFiltered.filter(item => {
+        const filteredPreprocessingData = preprocessingFiltered.filter(item => {
             const fullStatus = `${item.status}`;
             const select ="select"
             console.log(fullStatus);
@@ -398,19 +559,60 @@ export default function DashCaseManager({Logout}) {
                 return item
             }
         });
-        setData(filteredData)
-        setDataKalkulation(filteredKalkulationData);
-        setDataBestaetigung(filteredBestaetigungData);
-        setDataProduktion(filteredProduktionData);
-        setDataAbschluss(filteredAbschlussData);
+
+        const filteredWaermeData = waermeFiltered.filter(item => {
+            const fullStatus = `${item.status}`;
+            const select ="select"
+            console.log(fullStatus);
+            if(fullStatus == status){
+                return item
+            }if(select == status){
+                return item
+            }
+        });
+
+        const filteredSLMData = slmFiltered.filter(item => {
+            const fullStatus = `${item.status}`;
+            const select ="select"
+            console.log(fullStatus);
+            if(fullStatus == status){
+                return item
+            }if(select == status){
+                return item
+            }
+        });
+
+        const filteredDeburringData = deburringFiltered.filter(item => {
+            const fullStatus = `${item.status}`;
+            const select ="select"
+            console.log(fullStatus);
+            if(fullStatus == status){
+                return item
+            }if(select == status){
+                return item
+            }
+        });
+
+
+        setDataAdmin(filteredAdminData);
+        setDataCt(filteredCTData);
+        setDataSegmentierung(filteredSegmentierungData);
+        setDataMatching(filteredMatchingData);
+        setDataPreprocessing(filteredPreprocessingData);
+        setDataSLM(filteredSLMData);
+        setDataWaerme(filteredWaermeData);
+        setDataDeburring(filteredDeburringData);
     }
 
     const handleSetFilterBack = () =>{
-        setData(auftraegeFiltered);
-        setDataKalkulation(kalkulationFiltered);
-        setDataBestaetigung(bestaetigungFiltered);
-        setDataProduktion(produktionFiltered);
-        setDataAbschluss(abschlussFiltered);
+        setDataAdmin(adminitrationFiltered);
+        setDataCt(ctScanFiltered);
+        setDataSegmentierung(segmentierungFiltered);
+        setDataMatching(matchingFiltered);
+        setDataPreprocessing(preprocessingFiltered);
+        setDataSLM(slmFiltered);
+        setDataWaerme(waermeFiltered);
+        setDataDeburring(deburringFiltered);
     };
 
 
@@ -643,386 +845,151 @@ export default function DashCaseManager({Logout}) {
 
                                 <div className="border-4 border-dashed border-gray-200 rounded-lg h-96">
                                     {/*Button und Filter*/}
-                                    <div className="flex justify-evenly">
-
-                                        {/*Titel von Säule und Kalkulationsliste*/}
-                                        <div className="block pl-1 pr-1">
-                                            <h1 className="text-2xl font-semibold text-indigo-600 pb-2">Kalkulation</h1>
-                                            <div className="bg-white shadow-lg px-1 py-4 sm:px-2 sm:rounded-md w-7/8 text-xs">
-                                                <div className={styles3.columnTest}>
-                                                    <ul role="list" className="space-y-2 block justify-center">
-                                                        {allDataKalkulation.map((auftrag) => (
-                                                            <div className={styles2.case}>
-                                                                <li key={auftrag.id}
-                                                                    className="bg-white shadow-md overflow-hidden px-1 py-3 sm:px-4 sm:rounded-md text-xs hover:drop-shadow-xl hover:cursor-pointer">
-                                                                    {/* Content */}
-                                                                    <div className={styles2.fntSize}>
-                                                                        <div className="flex justify-between">
-                                                                            <div>
-                                                                                <div>Auftrag</div>
-                                                                                <div>CM</div>
-                                                                                <div>Patient</div>
-                                                                                {(auftrag.producer != "") ?
-                                                                                    <div>Producer</div> : ""
-                                                                                }
-
-                                                                            </div>
-                                                                            <div>
-                                                                                <div className="pl-4">{auftrag.caseNr}</div>
-                                                                                <div className="pl-4">{auftrag.caseManager}</div>
-                                                                                <div className="pl-4">{auftrag.patient}</div>
-                                                                                {(auftrag.producer != "") ?
-                                                                                    <div className="pl-4">{auftrag.producer}</div> : ""
-                                                                                }
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "Bearbeitbar") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-green-700'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "In Bearbeitung") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-orange-500'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "Freigeben") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-yellow-500'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "NC") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-red-700'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </div>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/*Titel von Säule und Auftragsliste*/}
-                                        <div className="block pl-1 pr-1">
-                                            <h1 className="text-2xl font-semibold text-indigo-600 pb-2">Auftrag</h1>
-                                            <div className="bg-white shadow-lg px-1 py-4 sm:px-2 sm:rounded-md w-7/8 text-xs">
-                                                <div className={styles3.columnTest}>
-                                                    <ul role="list" className="space-y-2 block justify-center">
-                                                        {allData.map((auftrag) => (
-                                                            <div className={styles2.case}>
-                                                                <li key={auftrag.id}
-                                                                    className="bg-white shadow-md overflow-hidden px-1 py-3 sm:px-4 sm:rounded-md text-xs hover:drop-shadow-xl hover:cursor-pointer">
-                                                                    {/* Content */}
-                                                                    <div className={styles2.fntSize}>
-                                                                        <div className="flex justify-between">
-                                                                            <div>
-                                                                                <div>Auftrag</div>
-                                                                                <div>CM</div>
-                                                                                <div>Patient</div>
-                                                                                {(auftrag.producer != "") ?
-                                                                                    <div>Producer</div> : ""
-                                                                                }
-
-                                                                            </div>
-                                                                            <div>
-                                                                                <div className="pl-4">{auftrag.caseNr}</div>
-                                                                                <div className="pl-4">{auftrag.caseManager}</div>
-                                                                                <div className="pl-4">{auftrag.patient}</div>
-                                                                                {(auftrag.producer != "") ?
-                                                                                    <div className="pl-4">{auftrag.producer}</div> : ""
-                                                                                }
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "Bearbeitbar") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-green-700'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "In Bearbeitung") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-orange-500'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "Freigeben") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-yellow-500'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "NC") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-red-700'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </div>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/*Titel von Säule und Bestätigung*/}
-                                        <div className="block pl-1 pr-1">
-                                            <h1 className="text-2xl font-semibold text-indigo-600 pb-2">Bestätigung</h1>
-                                            <div className="bg-white shadow-lg px-1 py-4 sm:px-2 sm:rounded-md w-7/8 text-xs">
-                                                <div className={styles3.columnTest}>
-                                                    <ul role="list" className="space-y-2 block justify-center">
-                                                        {allDataBestaetigung.map((auftrag) => (
-                                                            <div className={styles2.case}>
-                                                                <li key={auftrag.id}
-                                                                    className="bg-white shadow-md overflow-hidden px-1 py-3 sm:px-4 sm:rounded-md text-xs hover:drop-shadow-xl hover:cursor-pointer">
-                                                                    {/* Content */}
-                                                                    <div className={styles2.fntSize}>
-                                                                        <div className="flex justify-between">
-                                                                            <div>
-                                                                                <div>Auftrag</div>
-                                                                                <div>CM</div>
-                                                                                <div>Patient</div>
-                                                                                {(auftrag.producer != "") ?
-                                                                                    <div>Producer</div> : ""
-                                                                                }
-
-                                                                            </div>
-                                                                            <div>
-                                                                                <div className="pl-4">{auftrag.caseNr}</div>
-                                                                                <div className="pl-4">{auftrag.caseManager}</div>
-                                                                                <div className="pl-4">{auftrag.patient}</div>
-                                                                                {(auftrag.producer != "") ?
-                                                                                    <div className="pl-4">{auftrag.producer}</div> : ""
-                                                                                }
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "Bearbeitbar") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-green-700'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "In Bearbeitung") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-orange-500'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "Freigeben") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-yellow-500'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "NC") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-red-700'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </div>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/*Titel von Säule und Produktion*/}
-                                        <div className="block pl-1 pr-1">
-                                            <h1 className="text-2xl font-semibold text-indigo-600 pb-2">Produktion</h1>
-                                            <div className="bg-white shadow-lg px-1 py-4 sm:px-2 sm:rounded-md w-7/8 text-xs">
-                                                <div className={styles3.columnTest}>
-                                                    <ul role="list" className="space-y-2 block justify-center">
-                                                        {allDataProduktion.map((auftrag) => (
-                                                            <div className={styles2.case}>
-                                                                <li key={auftrag.id}
-                                                                    className="bg-white shadow-md overflow-hidden px-1 py-3 sm:px-4 sm:rounded-md text-xs hover:drop-shadow-xl hover:cursor-pointer">
-                                                                    {/* Content */}
-                                                                    <div className={styles2.fntSize}>
-                                                                        <div className="flex justify-between">
-                                                                            <div>
-                                                                                <div>Auftrag</div>
-                                                                                <div>CM</div>
-                                                                                <div>Patient</div>
-                                                                                {(auftrag.producer != "") ?
-                                                                                    <div>Producer</div> : ""
-                                                                                }
-
-                                                                            </div>
-                                                                            <div>
-                                                                                <div className="pl-4">{auftrag.caseNr}</div>
-                                                                                <div className="pl-4">{auftrag.caseManager}</div>
-                                                                                <div className="pl-4">{auftrag.patient}</div>
-                                                                                {(auftrag.producer != "") ?
-                                                                                    <div className="pl-4">{auftrag.producer}</div> : ""
-                                                                                }
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "Bearbeitbar") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-green-700'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "In Bearbeitung") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-orange-500'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "Freigeben") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-yellow-500'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "NC") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-red-700'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </div>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/*Titel von Säule und Abschluss*/}
-                                        <div className="block pl-1 pr-1">
-                                            <h1 className="text-2xl font-semibold text-indigo-600 pb-2">Abschluss</h1>
-                                            <div className="bg-white shadow-lg px-1 py-4 sm:px-2 sm:rounded-md w-7/8 text-xs">
-                                                <div className={styles3.columnTest}>
-                                                    <ul role="list" className="space-y-2 block justify-center">
-                                                        {allDataAbschluss.map((auftrag) => (
-                                                            <div className={styles2.case}>
-                                                                <li key={auftrag.id}
-                                                                    className="bg-white shadow-md overflow-hidden px-1 py-3 sm:px-4 sm:rounded-md text-xs hover:drop-shadow-xl hover:cursor-pointer">
-                                                                    {/* Content */}
-                                                                    <div className={styles2.fntSize}>
-                                                                        <div className="flex justify-between">
-                                                                            <div>
-                                                                                <div>Auftrag</div>
-                                                                                <div>CM</div>
-                                                                                <div>Patient</div>
-                                                                                {(auftrag.producer != "") ?
-                                                                                    <div>Producer</div> : ""
-                                                                                }
-
-                                                                            </div>
-                                                                            <div>
-                                                                                <div className="pl-4">{auftrag.caseNr}</div>
-                                                                                <div className="pl-4">{auftrag.caseManager}</div>
-                                                                                <div className="pl-4">{auftrag.patient}</div>
-                                                                                {(auftrag.producer != "") ?
-                                                                                    <div className="pl-4">{auftrag.producer}</div> : ""
-                                                                                }
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "Bearbeitbar") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-green-700'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "In Bearbeitung") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-orange-500'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "Freigeben") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-yellow-500'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "NC") ? <span
-                                                                                    className='w-3 h-3 rounded-full bg-red-700'
-                                                                                    aria-hidden="true"
-                                                                                /> : ""}
-                                                                            </div>
-                                                                            <div className="inline-flex">
-                                                                                {(auftrag.status == "Ausblendbar") ? <TrashIcon className="flex-shrink-0 h-3 w-3 text-black" aria-hidden="true" /> : ""}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </div>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-
-
-
-
-
-
-                                        <div className="block pt-12">
-                                            <div className="flex">
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                                >
-                                                    <PlusIcon className="h-5 w-5" aria-hidden="true"/>
-                                                </button>
-                                                <div className="ml-4 self-center text-xl font-semibold text-indigo-600">
-                                                    Neuer Auftrag
-                                                </div>
-                                            </div>
-
-
-                                            {/*Badge Bedingung*/}
-                                            <div className={styles2.badge}>
-                                                {(filters.case != "") ? (
-                                                    <Badge Titel={"Auftrag"} />
-                                                ):(
+                                    <div>
+                                        <div className="flex pt-5 justify-between pl-10">
+                                            <motion.div className={styles2.display}>
+                                                {(allDataAdmin=="") ? (
                                                     ""
-                                                )}
-                                                {(filters.date != "") ? (
-                                                    <Badge Titel={"Datum"} />
                                                 ):(
-                                                    ""
+                                                    <Shrinkable data={allDataAdmin} titel={"Administration"}
+                                                                countBearbeitbar={allDataAdmin.filter(d => d.status == "Bearbeitbar").length}
+                                                                countInBearbeitung={allDataAdmin.filter(d => d.status == "In Bearbeitung").length}
+                                                                countFreigeben={allDataAdmin.filter(d => d.status == "Freigeben").length}
+                                                                countNC={allDataAdmin.filter(d => d.status == "NC").length}
+
+                                                    />
                                                 )}
-                                                {(filters.phase != "") ? (
-                                                    <Badge Titel={"Phase"} />
+                                                {(allDataCt=="") ? (
+                                                    ""
                                                 ):(
-                                                    ""
+                                                    <Shrinkable data={allDataCt} titel={"CT-Scan"}
+                                                                countBearbeitbar={allDataCt.filter(d => d.status == "Bearbeitbar").length}
+                                                                countInBearbeitung={allDataCt.filter(d => d.status == "In Bearbeitung").length}
+                                                                countFreigeben={allDataCt.filter(d => d.status == "Freigeben").length}
+                                                                countNC={allDataCt.filter(d => d.status == "NC").length}
+
+                                                    />
                                                 )}
-                                                {(filters.status == "Bearbeitbar") | (filters.status == "NC") | (filters.status == "Freigeben") | (filters.status == "In Bearbeitung") | (filters.status == "Ausblendbar")? (
-                                                    <Badge Titel={"Status"} />
+                                                {(allDataSegmentierung=="") ? (
+                                                    ""
                                                 ):(
-                                                    ""
+                                                    <Shrinkable data={allDataSegmentierung} titel={"CT-Datensegmentierung"}
+                                                                countBearbeitbar={allDataSegmentierung.filter(d => d.status == "Bearbeitbar").length}
+                                                                countInBearbeitung={allDataSegmentierung.filter(d => d.status == "In Bearbeitung").length}
+                                                                countFreigeben={allDataSegmentierung.filter(d => d.status == "Freigeben").length}
+                                                                countNC={allDataSegmentierung.filter(d => d.status == "NC").length}
+
+                                                    />
                                                 )}
-                                                {(filters.customer != "") ? (
-                                                    <Badge Titel={"Kunde"} />
+                                                {(allDataMatching=="") ? (
+                                                    ""
                                                 ):(
-                                                    ""
+                                                    <Shrinkable data={allDataMatching} titel={"Implantatdesign Matching"}
+                                                                countBearbeitbar={allDataMatching.filter(d => d.status == "Bearbeitbar").length}
+                                                                countInBearbeitung={allDataMatching.filter(d => d.status == "In Bearbeitung").length}
+                                                                countFreigeben={allDataMatching.filter(d => d.status == "Freigeben").length}
+                                                                countNC={allDataMatching.filter(d => d.status == "NC").length}
+
+                                                    />
                                                 )}
-                                                {(filters.patient != "") ? (
-                                                    <Badge Titel={"Patient"} />
+                                                {(allDataPreprocessing=="") ? (
+                                                    ""
                                                 ):(
-                                                    ""
+                                                    <Shrinkable data={allDataPreprocessing} titel={"Pre-Processing"}
+                                                                countBearbeitbar={allDataPreprocessing.filter(d => d.status == "Bearbeitbar").length}
+                                                                countInBearbeitung={allDataPreprocessing.filter(d => d.status == "In Bearbeitung").length}
+                                                                countFreigeben={allDataPreprocessing.filter(d => d.status == "Freigeben").length}
+                                                                countNC={allDataPreprocessing.filter(d => d.status == "NC").length}
+
+                                                    />
                                                 )}
-                                            </div>
-                                            <div className={styles2.filterSection}>
+                                                {(allDataSLM=="") ? (
+                                                    ""
+                                                ):(
+                                                    <Shrinkable data={allDataSLM} titel={"SLM"}
+                                                                countBearbeitbar={allDataSLM.filter(d => d.status == "Bearbeitbar").length}
+                                                                countInBearbeitung={allDataSLM.filter(d => d.status == "In Bearbeitung").length}
+                                                                countFreigeben={allDataSLM.filter(d => d.status == "Freigeben").length}
+                                                                countNC={allDataSLM.filter(d => d.status == "NC").length}
+
+                                                    />
+                                                )}
+                                                {(allDataWaerme=="") ? (
+                                                    ""
+                                                ):(
+                                                    <Shrinkable data={allDataWaerme} titel={"Wärmebehandlung"}
+                                                                countBearbeitbar={allDataWaerme.filter(d => d.status == "Bearbeitbar").length}
+                                                                countInBearbeitung={allDataWaerme.filter(d => d.status == "In Bearbeitung").length}
+                                                                countFreigeben={allDataWaerme.filter(d => d.status == "Freigeben").length}
+                                                                countNC={allDataWaerme.filter(d => d.status == "NC").length}
+
+                                                    />
+                                                )}
+                                                {(allDataDeburring=="") ? (
+                                                    ""
+                                                ):(
+                                                    <Shrinkable data={allDataDeburring} titel={"Deburring"}
+                                                                countBearbeitbar={allDataDeburring.filter(d => d.status == "Bearbeitbar").length}
+                                                                countInBearbeitung={allDataDeburring.filter(d => d.status == "In Bearbeitung").length}
+                                                                countFreigeben={allDataDeburring.filter(d => d.status == "Freigeben").length}
+                                                                countNC={allDataDeburring.filter(d => d.status == "NC").length}
+
+                                                    />
+                                                )}
+                                            </motion.div>
+
+
+
+
+
+                                            <div className="block pt-12">
+                                                <div className="flex">
+                                                    <button
+                                                        type="button"
+                                                        className="inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                    >
+                                                        <PlusIcon className="h-5 w-5" aria-hidden="true"/>
+                                                    </button>
+                                                    <div className="ml-4 self-center text-xl font-semibold text-indigo-600">
+                                                        Neuer Auftrag
+                                                    </div>
+                                                </div>
+
+
+                                                {/*Badge Bedingung*/}
+                                                <div className={styles2.badge}>
+                                                    {(filters.case != "") ? (
+                                                        <Badge Titel={"Auftrag"} />
+                                                    ):(
+                                                        ""
+                                                    )}
+                                                    {(filters.date != "") ? (
+                                                        <Badge Titel={"Datum"} />
+                                                    ):(
+                                                        ""
+                                                    )}
+                                                    {(filters.phase != "") ? (
+                                                        <Badge Titel={"Phase"} />
+                                                    ):(
+                                                        ""
+                                                    )}
+                                                    {(filters.status == "Bearbeitbar") | (filters.status == "NC") | (filters.status == "Freigeben") | (filters.status == "In Bearbeitung") | (filters.status == "Ausblendbar")? (
+                                                        <Badge Titel={"Status"} />
+                                                    ):(
+                                                        ""
+                                                    )}
+                                                    {(filters.customer != "") ? (
+                                                        <Badge Titel={"Kunde"} />
+                                                    ):(
+                                                        ""
+                                                    )}
+                                                    {(filters.patient != "") ? (
+                                                        <Badge Titel={"Patient"} />
+                                                    ):(
+                                                        ""
+                                                    )}
+                                                </div>
+                                                <div className={styles2.filterSection}>
                                                     <div
                                                         className="bg-white shadow-lg px-1 py-2 sm:px-2 w-56 sm:rounded-md text-xs inline-block align-bottom">
 
@@ -1118,7 +1085,7 @@ export default function DashCaseManager({Logout}) {
                                                             <div className=" pl-2 pr-0.5 mb-2 flex mt-1 justify-between items-center text-center content-center">
                                                                 <div className="flex place-items-center">
                                                                     <input id="freigeben" aria-describedby="candidates-description"
-                                                                           name="freigeben" type="checkbox" onChange={handleInput("status")} value={"Freigeben"}
+                                                                           name="freigeben" type="checkbox" onChange={handleInput("status")} value={filters.status}
                                                                            className="focus:ring-indigo-500 h-3 w-3 text-indigo-600 border-gray-300 rounded hover:cursor-pointer" />
                                                                     <div className="ml-1 text-xs">
                                                                         <label htmlFor="freigeben" className="font-thin text-gray-700">Freigeben</label>
@@ -1128,8 +1095,8 @@ export default function DashCaseManager({Logout}) {
                                                             {/*Checkbox*/}
                                                             <div className=" pl-2 pr-2 mb-2 mt-1 flex justify-between items-center text-center content-center">
                                                                 <div className="flex place-items-center">
-                                                                    <input id="freigeben" aria-describedby="candidates-description"
-                                                                           name="freigeben" type="checkbox"
+                                                                    <input id="wartung" aria-describedby="candidates-description"
+                                                                           name="wartung" type="checkbox"
                                                                            className="focus:ring-indigo-500 h-3 w-3 text-indigo-600 border-gray-300 rounded hover:cursor-pointer" />
                                                                     <div className="ml-1 text-xs">
                                                                         <label htmlFor="freigeben" className="font-thin text-gray-700">Wartung/Kalibrierung</label>
@@ -1154,6 +1121,7 @@ export default function DashCaseManager({Logout}) {
 
 
 
+                                        </div>
                                     </div>
                                     {modalOpen && <LogoutAlert Logout={Logout} setOpenModal={setModalOpen}/>}
                                 </div>

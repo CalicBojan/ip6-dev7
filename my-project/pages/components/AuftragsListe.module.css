@@ -1,5 +1,17 @@
 .columnTest{
-    height: 500px;
-    max-height: 800px;
+    height: 605px;
+    max-height: 1000px;
     min-width: 9rem;
 }
+
+.columnTestShrinked{
+    height: 500px;
+    max-height: 1000px;
+    min-width: 2rem;
+    padding-top: 50px;
+}
+
+.columnTestShrinked h1{
+    -webkit-writing-mode: vertical-lr;
+}
+
