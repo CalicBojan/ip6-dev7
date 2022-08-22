@@ -34,7 +34,7 @@ export default function Shrinkable({ data, titel, countBearbeitbar, countInBearb
                                 </span>
                                 </div>
                                 <div className={styles.badgeProportionShrinked}>
-                                <span className="inline-flex rounded-full items-center p-1 w-6 h-6 font-semibold bg-red-700 text-white text-sm justify-center">
+                                <span className="inline-flex rounded-full items-center p-1 w-6 h-6 font-semibold bg-yellow-500 text-white text-sm justify-center">
                                   {countFreigeben}
                                 </span>
                                 </div>

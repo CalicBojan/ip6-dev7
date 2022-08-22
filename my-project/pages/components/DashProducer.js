@@ -96,6 +96,9 @@ export default function DashProducer({Logout}) {
     };
 
 
+
+
+
     const handleInput = (field) => (event) => {
         console.log("handleCustomerChange activated")
         const { value } = event.target;
@@ -764,7 +767,7 @@ export default function DashProducer({Logout}) {
                                 </form>
                             </div>
                             <div className="ml-8 flex items-center md:ml-6 font-light mr-4">
-                                <h1 className="mr-4">Case Manager</h1>
+                                <h1 className="mr-4">Producer</h1>
 
                                 {/* Profile dropdown */}
                                 <Menu as="div" className="ml-3 relative">
@@ -797,7 +800,7 @@ export default function DashProducer({Logout}) {
                                                 <h1>Bojan Calic</h1>
                                             </div>
                                             <div className="block px-4 pb-2 font-light text-xs">
-                                                <h1>Case Manager</h1>
+                                                <h1>Producer</h1>
                                             </div>
                                             {userNavigation.map((item) => (
                                                 <Menu.Item key={item.name}>
